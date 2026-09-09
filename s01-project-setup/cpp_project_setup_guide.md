@@ -10,17 +10,18 @@ mkdir cpp-project && cd cpp-project
 _______________________________________________________________________________
 
 Use `mise` to the set the project to use the latest version 
-of `clang`, `cmake`, and `ninja`
+of `clang`, `clang-format`, `cmake`, and `ninja`
 ```bash
 mise use clang@latest
 mise use cmake@latest
+mise use clang-format@latest
 mise use ninja@latest
 ```
 
 Note:
 - `clang` a collection of tools for C and C++ project. 
 It includes the `clang++` toolchaing that includes `clang++` C++ compiler
-
+- `clang-format` is a formatter for C and C++ projects.
 - `cmake` generates build instructions using a `CMakeLists.txt` file
 - `ninja` executes the build instructions that CMake generated 
 _______________________________________________________________________________

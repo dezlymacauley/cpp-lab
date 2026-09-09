@@ -1,4 +1,5 @@
 [tools]
 clang = "latest"
+clang-format = "latest"
 cmake = "latest"
 ninja = "latest"
