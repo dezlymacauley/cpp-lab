@@ -18,7 +18,7 @@ fi
 printf "\n%s\n" '✅ Build instructions generated'
 #______________________________________________________________________________
 
-# STEP: 2 => Generate the build instructions
+# STEP: 2 => Build the project
 
 # If there was an error building the project,
 # it will be displayed. 
