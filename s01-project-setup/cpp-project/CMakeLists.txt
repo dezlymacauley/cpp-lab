@@ -15,4 +15,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # This will create a binary executable called `cpp_project`,
 # using the source file `src/main.cpp`
+
+# Registers the name of the binary executable, 
+# and the  `.cpp` file that should be used to create it.
 add_executable(cpp_project src/main.cpp)

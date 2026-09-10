@@ -55,6 +55,9 @@ foreach(CPP_FILE ${SRC_DIR})
 
     # The second step is to register the `.cpp` file, 
     # and the name that should be used to create its binary executable
+
+    # The second step is to register the name of the binary executable, 
+    # and the `.cpp` file that should be used to create it.
     add_executable(${NAME_OF_BINARY} ${CPP_FILE})
 endforeach()
 
