@@ -31,7 +31,13 @@ _______________________________________________________________________________
 ```bash
 touch .gitignore
 touch CMakeLists.txt
+
 mkdir src && touch src/main.cpp
+
+mkdir .mise-tasks 
+cd .mise-tasks && touch build.bash clean.bash dev.bash
+cd ..
+chmod u+x .mise-tasks/*.bash
 ```
 _______________________________________________________________________________
 
@@ -76,7 +82,41 @@ int main() {
 ```
 _______________________________________________________________________________
 
-### Build the program (Create an executable binary)
+Add this to the `.mise-tasks/build.bash` file
+```bash
+#!/usr/bin/env bash
+
+#MISE description="👷 Build the project"
+#MISE quiet=true
+
+cmake -B build -G Ninja
+cmake --build build
+```
+_______________________________________________________________________________
+
+Add this to the `.mise-tasks/clean.bash` file
+```bash
+#!/usr/bin/env bash
+
+#MISE description="🧼 Delete the 'build' directory"
+#MISE quiet=true
+
+rm -rf build
+```
+_______________________________________________________________________________
+
+Add this to the `.mise-tasks/dev.bash` file
+```bash
+#!/usr/bin/env bash
+
+#MISE description="🚀 Run the project"
+#MISE quiet=true
+
+./build/cpp_project
+```
+_______________________________________________________________________________
+
+### Generate the build instructions
 
 Use `cmake` to convert the build instructions in the `CMakeLists.txt` file 
 into a format that can be used by `ninja`.
@@ -104,9 +144,17 @@ the build instructions for.
 
 _______________________________________________________________________________
 
+### Build the program (Create an executable binary)
+
 ```bash
 cmake --build build
 ```
+
+#### Note:
+- CMake does not compile the program. It simply acts as a trigger to let 
+the `ninja` program know that it should use the ninja-specific 
+build instructions from the `build` directory, to build the program 
+and create an executable binary.
 _______________________________________________________________________________
 
 ### Run the program (Run the executable binary)
