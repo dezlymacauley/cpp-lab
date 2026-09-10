@@ -7,18 +7,24 @@
 
 # STEP: 1 => Generate the build instructions
 
-if ! cmake -B build -G Ninja; then
-    printf "\n%s\n\n"  '❌ Failed to generate build instructions'
+# If there was an error generating the build instructions, 
+# it will be displayed. 
+if ! build_instruction_error_message=$(cmake -B build -G Ninja 2>&1); then
+    printf "\n%s\n\n" '❌ Failed to generate build instructions'
+    printf "%s\n" "$build_instruction_error_message"
     exit 1
 fi
 
-printf "\n%s\n\n" '✅ Build instructions generated'
+printf "\n%s\n" '✅ Build instructions generated'
 #______________________________________________________________________________
 
 # STEP: 2 => Generate the build instructions
 
-if ! cmake --build build; then
-    printf "\n%s\n\n"  '❌ Failed to build project'
+# If there was an error building the project,
+# it will be displayed. 
+if ! build_output_error_messages=$(cmake --build build 2>&1); then
+    printf "\n%s\n\n" '❌ Failed to build project'
+    printf "%s\n" "$build_output_error_messages"
     exit 1
 fi
 

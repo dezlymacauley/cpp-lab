@@ -1,5 +1,5 @@
 # The minimum version of `cmake` needed to run this file
-zzzcmake_minimum_required(VERSION 4.4.3)
+cmake_minimum_required(VERSION 4.4.3)
 
 # The first argument is the project name
 # The second argument `LANGUAGES CXX`, 

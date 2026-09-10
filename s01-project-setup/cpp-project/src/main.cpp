@@ -1,6 +1,6 @@
 #include <iostream>
 
-zzzint main() {
+int main() {
     std::cout << "\nC++ Project\n\n";
     return 0;
 }
