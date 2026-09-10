@@ -1,6 +1,6 @@
 #include <iostream>
 
 int main() {
-    std::cout << "\nC++ Project\n\n";
+    std::cout << "\nThis is Delta\n\n";
     return 0;
 }
