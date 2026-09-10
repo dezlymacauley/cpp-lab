@@ -3,3 +3,11 @@ clang = "latest"
 clang-format = "latest"
 cmake = "latest"
 ninja = "latest"
+
+[env]
+# `mise` has a built-in variable called `config_root` that allows you 
+# to get the absolute path to the location of this `mise.toml` file
+PROJECT_ROOT = "{{config_root}}"
+
+[shell_alias]
+run = "mise dev"
