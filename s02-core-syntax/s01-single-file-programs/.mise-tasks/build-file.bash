@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#MISE description="🚀 Build and run a specific C++ file"
+#MISE description="👷 Build a specific C++ file"
 #MISE quiet=true
 
 #______________________________________________________________________________
@@ -19,7 +19,7 @@ fi
 
 #______________________________________________________________________________
 
-# STEP: 2: Store the name of the binary executable in a variable
+# STEP: 2: Extract the file name fom the file path
 
 # E.g. If you use run the command: `mise dev src/s01/s01_alpha.cpp`
 # Then `NAME_OF_BINARY` will be set to `s01_alpha`
@@ -31,8 +31,7 @@ NAME_OF_BINARY=$(basename "$1" .cpp)
 
 #______________________________________________________________________________
 
-# STEP: 3: Generate the build 
-
+# STEP: 3: Generate the build instructions
 
 # Use cmake to read the `CMakeLists.txt` file and generate build
 # instructions for `Ninja` in the `build` directory of the project
@@ -44,33 +43,6 @@ cmake -B "$PROJECT_ROOT/build" -G Ninja &>/dev/null
 
 # STEP: 4: Build the project
 
-# if ! BUILD_OUTPUT=$(cmake --build "$PROJECT_ROOT/build" --target "$NAME_OF_BINARY" 2>&1); then
-#     printf "\n%s\n\n" "❌ Error: $NAME_OF_BINARY could not be built"
-#     printf "%s\n\n" "$BUILD_OUTPUT"
-#     exit 1
-# fi
+# cmake --build build
 
-# cmake -B build -G Ninja
-
-# This will check if a binary executable could be built
-# if ! mise build &>/dev/null; then
-#
-#     printf "\n%s\n\n" "❌ Error: $NAME_OF_BINARY could not be built"
-#     
-#     # If the build fails run `mise build` again so 
-#     # the that compiler errors are visible
-#     mise build
-#
-#     exit 1
-# fi
-
-# if ! BUILD_OUTPUT=$(mise run build 2>&1); then
-#     printf "\n%s\n\n" "❌ Error: $NAME_OF_BINARY could not be built"
-#     printf "%s\n\n" "$BUILD_OUTPUT"
-#     exit 1
-# fi
-
-
-# Use the `PROJECT_ROOT` variable that was set in the `mise.toml` file,
-# to run the binary that is in the build directory
-# "$PROJECT_ROOT/build/$NAME_OF_BINARY"
+#______________________________________________________________________________
