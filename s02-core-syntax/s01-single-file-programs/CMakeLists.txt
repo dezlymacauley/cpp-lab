@@ -40,12 +40,22 @@ file(GLOB_RECURSE SRC_DIR CONFIGURE_DEPENDS "src/*.cpp")
 
 #______________________________________________________________________________
 
+# This is a loop that will perform a set of actions for each C++ file 
+# in the `src` directory
+foreach(CPP_FILE ${SRC_DIR})
 
+    # The first step is to create a name for each binary executable
+    # Each `.cpp` file will have a binary executable that is equal to the
+    # name without the extension.
+    # Eg. `s01_example_program.cpp` will be compiled to `s01_example_program`
+
+    # `NAME_WE` is used to get the name of the file, excluding 
+    # the .cpp extension
+    get_filename_component(NAME_OF_BINARY ${CPP_FILE} NAME_WE)
+
+    # The second step is to register the `.cpp` file, 
+    # and the name that should be used to create its binary executable
+    add_executable(${NAME_OF_BINARY} ${CPP_FILE})
+endforeach()
 
 #______________________________________________________________________________
-
-
-
-# This will create a binary executable called `cpp_project`,
-# using the source file `src/main.cpp`
-# add_executable(cpp_project src/main.cpp)
