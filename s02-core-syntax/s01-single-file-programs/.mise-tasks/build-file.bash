@@ -41,13 +41,13 @@ cmake -B "$PROJECT_ROOT/build" -G Ninja &>/dev/null
 
 #______________________________________________________________________________
 
-# STEP: 4: Build the project
+# STEP: 4: Build the C++ file
 
-if ! BUILD_OUTPUT=$(cmake --build "$PROJECT_ROOT/build" --target "$NAME_OF_BINARY" 2>&1); then
-    printf "\n%s\n\n" "❌ Build failed for $NAME_OF_BINARY:"
-    printf "%s\n\n" "$BUILD_OUTPUT"
-    exit 1
-fi
+# if ! BUILD_OUTPUT=$(cmake --build "$PROJECT_ROOT/build" --target "$NAME_OF_BINARY" 2>&1); then
+#     printf "\n%s\n\n" "❌ Build failed for $NAME_OF_BINARY:"
+#     printf "%s\n\n" "$BUILD_OUTPUT"
+#     exit 1
+# fi
 
 # cmake --build build
 
