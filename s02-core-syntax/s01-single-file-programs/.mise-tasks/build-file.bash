@@ -8,12 +8,12 @@
 # STEP: 1: Check if a C++ file path was specified
 
 if [ -z "$1" ]; then
-    printf "\n%s\n\n" '❌ Error: You did not specify which C++ file to run'
-    printf "%s\n" 'Usage: mise dev file_name.cpp'
-    printf "%s\n\n" 'mise dev file_name.cpp'
+    printf "\n%s\n\n" '❌ Error: You did not specify which C++ file to build'
+    printf "%s\n" 'Usage:'
+    printf "%s\n\n" 'mise build-file file_name.cpp'
     
-    printf "%s\n" '💡Tip: Use the run alias'
-    printf "%s\n\n" 'run file_name.cpp'
+    printf "%s\n" '💡Tip: Use the build alias'
+    printf "%s\n\n" 'build file_name.cpp'
     exit 1
 fi
 
@@ -42,6 +42,12 @@ cmake -B "$PROJECT_ROOT/build" -G Ninja &>/dev/null
 #______________________________________________________________________________
 
 # STEP: 4: Build the project
+
+if ! BUILD_OUTPUT=$(cmake --build "$PROJECT_ROOT/build" --target "$NAME_OF_BINARY" 2>&1); then
+    printf "\n%s\n\n" "❌ Build failed for $NAME_OF_BINARY:"
+    printf "%s\n\n" "$BUILD_OUTPUT"
+    exit 1
+fi
 
 # cmake --build build
 

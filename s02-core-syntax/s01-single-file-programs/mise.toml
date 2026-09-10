@@ -10,4 +10,5 @@ ninja = "latest"
 PROJECT_ROOT = "{{config_root}}"
 
 [shell_alias]
-run = "mise dev"
+build = "mise build-file"
+run = "mise run-file"
