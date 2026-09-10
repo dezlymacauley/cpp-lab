@@ -17,6 +17,25 @@ fi
 # Gets the name of the binary by removing the .cpp extension
 NAME_OF_BINARY=$(basename "$1" .cpp)
 
+# This will check if a binary executable could be built
+# if ! mise build &>/dev/null; then
+#
+#     printf "\n%s\n\n" "❌ Error: $NAME_OF_BINARY could not be built"
+#     
+#     # If the build fails run `mise build` again so 
+#     # the that compiler errors are visible
+#     mise build
+#
+#     exit 1
+# fi
+
+if ! BUILD_OUTPUT=$(mise run build 2>&1); then
+    printf "\n%s\n\n" "❌ Error: $NAME_OF_BINARY could not be built"
+    printf "%s\n\n" "$BUILD_OUTPUT"
+    exit 1
+fi
+
+
 # Use the `PROJECT_ROOT` variable that was set in the `mise.toml` file,
 # to run the binary that is in the build directory
 "$PROJECT_ROOT/build/$NAME_OF_BINARY"

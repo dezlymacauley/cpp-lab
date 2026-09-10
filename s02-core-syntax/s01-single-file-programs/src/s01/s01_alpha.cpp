@@ -1,6 +1,6 @@
 #include <iostream>
 
-int main() {
+zzint main() {
     std::cout << "\nThis is Alpha\n\n";
     return 0;
 }
