@@ -5,5 +5,5 @@ cmake = "latest"
 ninja = "latest"
 
 [shell_alias]
-run = "mise runbin"
-build = "mise buildfile"
+build = "mise build-file"
+run = "mise run-bin"

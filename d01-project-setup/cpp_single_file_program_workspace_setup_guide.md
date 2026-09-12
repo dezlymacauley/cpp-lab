@@ -44,9 +44,9 @@ touch programs/d02-topic-two/f01_charlie.cpp
 touch programs/d02-topic-two/f02_delta.cpp
 
 mkdir .mise-tasks 
+touch .mise-tasks/build-file.bash 
 touch .mise-tasks/clean.bash 
-touch .mise-tasks/buildfile.bash 
-touch .mise-tasks/runbin.bash 
+touch .mise-tasks/run-bin.bash 
 chmod u+x .mise-tasks/*.bash
 ```
 _______________________________________________________________________________
@@ -229,8 +229,8 @@ _______________________________________________________________________________
 Add this to the end of the `mise.toml` file
 ```toml
 [shell_alias]
-run = "mise runbin"
-build = "mise buildfile"
+build = "mise build-file"
+run = "mise run-bin"
 ```
 
 The full file should look like this:
@@ -242,8 +242,8 @@ cmake = "latest"
 ninja = "latest"
 
 [shell_alias]
-run = "mise runbin"
-build = "mise buildfile"
+build = "mise build-file"
+run = "mise run-bin"
 ```
 _______________________________________________________________________________
 
