@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#MISE description="👷 Build a specific .cpp file target"
+#MISE description="👷 Build a specific .cpp file | alias = build"
 #MISE quiet=true
 
 #______________________________________________________________________________
