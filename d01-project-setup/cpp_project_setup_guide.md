@@ -227,6 +227,9 @@ mise build
 the `ninja` program know that it should use the ninja-specific 
 build instructions from the `build` directory, to build the program 
 and create an executable binary.
+
+- CMake is a build system generator. You create a `CMakeLists.txt` file
+and it generates the build system for your compiler.
 _______________________________________________________________________________
 
 ### Run the program (Run the executable binary)
