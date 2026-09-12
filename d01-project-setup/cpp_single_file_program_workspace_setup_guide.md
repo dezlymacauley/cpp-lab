@@ -112,27 +112,25 @@ _______________________________________________________________________________
 
 ## Continue to update from Here
 
-
 Add this to the `CMakeLists.txt` file
 ```cmake
-# The minimum version of `cmake` needed to run this file
 cmake_minimum_required(VERSION 4.4.3)
 
-# The first argument is the project name
-# The second argument `LANGUAGES CXX`, 
-# is used to specify that this project only uses C++
-project(cpp-project LANGUAGES CXX)
+project(cpp-single-file-workspace LANGUAGES CXX)
 
-# Sets the C++ standard that should be used to compile the project
 set(CMAKE_CXX_STANDARD 20)
-
-# Ensures that build failds if the compiler version does not support 
-# the C++ standard that is set in this file
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# This will create a binary executable called `cpp_project`,
-# using the source file `src/main.cpp`
-add_executable(cpp_project src/main.cpp)
+# Find all .cpp files recursively inside the programs directory
+file(GLOB_RECURSE PROGRAM_SOURCES CONFIGURE_DEPENDS "programs/*.cpp")
+
+foreach(SOURCE_FILE ${PROGRAM_SOURCES})
+    # Extract filename without extension (e.g., f01_alpha)
+    get_filename_component(TARGET_NAME ${SOURCE_FILE} NAME_WE)
+    
+    # Register each source file as its own standalone executable target
+    add_executable(\({TARGET_NAME}\){SOURCE_FILE})
+endforeach()
 ```
 _______________________________________________________________________________
 
@@ -228,6 +226,27 @@ fi
 ```
 _______________________________________________________________________________
 
+Add this to the end of the `mise.toml` file
+```toml
+[shell_alias]
+run = "mise runbin"
+build = "mise buildfile"
+```
+
+The full file should look like this:
+```toml
+[tools]
+clang = "latest"
+clang-format = "latest"
+cmake = "latest"
+ninja = "latest"
+
+[shell_alias]
+run = "mise runbin"
+build = "mise buildfile"
+```
+_______________________________________________________________________________
+
 ### To view a list of `mise tasks`, run this command
 ```bash
 mise tasks
@@ -235,9 +254,6 @@ mise tasks
 
 You should get an output like this
 ```
-/015   buildfile.bash
-/016   clean.bash
-/017   runbin.bash
 ```
 _______________________________________________________________________________
 

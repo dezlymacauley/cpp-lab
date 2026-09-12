@@ -3,3 +3,7 @@ clang = "latest"
 clang-format = "latest"
 cmake = "latest"
 ninja = "latest"
+
+[shell_alias]
+run = "mise runbin"
+build = "mise buildfile"
