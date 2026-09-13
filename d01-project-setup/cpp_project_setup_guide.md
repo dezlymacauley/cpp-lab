@@ -5,7 +5,8 @@ _______________________________________________________________________________
 _______________________________________________________________________________
 
 ```bash
-mkdir cpp-project && cd cpp-project 
+mkdir cpp-project-setup-guide
+cd cpp-project-setup-guide
 ```
 _______________________________________________________________________________
 
@@ -13,8 +14,8 @@ Use `mise` to the set the project to use the latest version
 of `clang`, `clang-format`, `cmake`, and `ninja`
 ```bash
 mise use clang@latest
-mise use cmake@latest
 mise use clang-format@latest
+mise use cmake@latest
 mise use ninja@latest
 ```
 
@@ -32,42 +33,14 @@ _______________________________________________________________________________
 touch .gitignore
 touch CMakeLists.txt
 
-mkdir src && touch src/main.cpp
+mkdir src
+touch src/main.cpp
 
 mkdir .mise-tasks 
-cd .mise-tasks && touch build.bash clean.bash dev.bash
-cd ..
+touch .mise-tasks/build-all.bash 
+touch .mise-tasks/clean.bash 
+touch .mise-tasks/run-bin.bash 
 chmod u+x .mise-tasks/*.bash
-```
-_______________________________________________________________________________
-
-Add this to the `.gitignore` file
-```bash
-# Build Output
-/build/
-```
-_______________________________________________________________________________
-
-Add this to the `CMakeLists.txt` file
-```cmake
-# The minimum version of `cmake` needed to run this file
-cmake_minimum_required(VERSION 4.4.3)
-
-# The first argument is the project name
-# The second argument `LANGUAGES CXX`, 
-# is used to specify that this project only uses C++
-project(cpp-project LANGUAGES CXX)
-
-# Sets the C++ standard that should be used to compile the project
-set(CMAKE_CXX_STANDARD 20)
-
-# Ensures that build failds if the compiler version does not support 
-# the C++ standard that is set in this file
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# This will create a binary executable called `cpp_project`,
-# using the source file `src/main.cpp`
-add_executable(cpp_project src/main.cpp)
 ```
 _______________________________________________________________________________
 
@@ -82,40 +55,102 @@ int main() {
 ```
 _______________________________________________________________________________
 
-Add this to the `.mise-tasks/build.bash` file
+Add this to the `.gitignore` file
+```bash
+# Build Output
+/build/
+```
+_______________________________________________________________________________
+
+Add this to the `CMakeLists.txt` file
+```cmake
+# Sets the minimum version of CMake that is required to use 
+# this `CMakeLists.txt` file
+# To figure out what version of CMake your project is using, run this command:
+# cmake --version
+cmake_minimum_required(VERSION 4.4.3)
+
+# Sets the project name and lets CMake know that this project 
+# only uses C++ code. 
+project(cpp-single-file-workspace LANGUAGES CXX)
+
+# This line is used to create a list of all the `.cpp` files in the project
+# that should be built, and then store 
+# that list as a variable that I have chosen to call `SRC_DIRECTORY`.
+
+# `GLOB_RECURSE` and `"src/*.cpp"` tell CMake 
+# to search for all `.cpp` files inside the "src" directory,
+# including any sub-directories that contain `.cpp` files.
+
+# `CONFIGURE_DEPENDS` tells CMake to check the file system of the project 
+# for changes before building the project. So if you add, delete, or rename,
+# things inside the `src` directory,
+# CMake will ensure that the variable `SRC_DIRECTORY` is updated.
+file(GLOB_RECURSE SRC_DIRECTORY CONFIGURE_DEPENDS "src/*.cpp")
+
+# This is a `foreach` loop in CMake.
+# It allows CMAKE to to perform a set of actions for each `.cpp` file in the
+# the `src` directory.
+foreach(CPP_FILE ${SRC_DIRECTORY})
+
+    # A `.cpp` file is built, a binary executable is created.
+    # The line below allows you to set the name of the binary executable
+    # in advance, and store it in a variable called `BINARY_NAME`.
+    # `${CPP_FILE} NAME_WE` means that the `BINARY_NAME` is equal to the C++ file
+    # without the extension.
+    # So if CPP_FILE = f01_alpha.cpp, and BINARY_NAME = f01_alpha
+    get_filename_component(BINARY_NAME ${CPP_FILE} NAME_WE)
+
+    # This is where you list what should be built and from which `.cpp` file
+    # E.g. Build `f01_alpha` from `f01_alpha.cpp`
+    add_executable(${BINARY_NAME} ${CPP_FILE})
+    
+    # This is where you specify build settings.
+    # `PRIVATE cxx_std_17` tells CMake what C++ standard should 
+    # be used to build this specific binary.
+
+    # You can use the website below to view a list a valid C++ standards.
+    # I recommend using the second latest one unless you need a feature 
+    # from the latest one:
+    # https://www.cplusplus-language.org/
+    target_compile_features(${BINARY_NAME} PRIVATE cxx_std_17)
+
+endforeach()
+```
+_______________________________________________________________________________
+
+### Add this to the `.mise-tasks/build-all.bash` file
 ```bash
 #!/usr/bin/env bash
 
-#MISE description="👷 Build the project"
+#MISE description="👷 Build the project | alias build"
 #MISE quiet=true
 
 #______________________________________________________________________________
 
-# STEP: 1 => Generate the build instructions
+# STEP: 1 => Generate the build instructions if they have not been generated
 
-# If there was an error generating the build instructions, 
-# it will be displayed. 
-if ! build_instruction_error_message=$(cmake -B build -G Ninja 2>&1); then
-    printf "\n%s\n\n" '❌ Failed to generate build instructions'
-    printf "%s\n" "$build_instruction_error_message"
-    exit 1
+if [ ! -d "build" ]; then
+    if ! build_instruction_error_message=$(cmake -B build -G Ninja 2>&1); then
+        printf "\n%s\n\n" '❌ Failed to generate build instructions:'
+        printf "%s\n" "$build_instruction_error_message"
+        exit 1
+    fi
 fi
 
-printf "\n%s\n" '✅ Build instructions generated'
 #______________________________________________________________________________
 
 # STEP: 2 => Build the project
 
-# If there was an error building the project,
-# it will be displayed. 
 if ! build_output_error_messages=$(cmake --build build 2>&1); then
     printf "\n%s\n\n" '❌ Failed to build project'
     printf "%s\n" "$build_output_error_messages"
     exit 1
 fi
 
-printf "\n%s\n\n" '✅ Project built'
 #______________________________________________________________________________
+
+printf "\n%s\n\n" '✅ All programs in the workspace have been built'
 ```
 _______________________________________________________________________________
 
@@ -123,7 +158,7 @@ Add this to the `.mise-tasks/clean.bash` file
 ```bash
 #!/usr/bin/env bash
 
-#MISE description="🧼 Delete the 'build' directory"
+#MISE description="🧼 Delete the 'build' directory | alias = clean"
 #MISE quiet=true
 
 if [ ! -d build ]; then
@@ -136,70 +171,65 @@ printf "\n%s\n\n" '✅ The build directory has been deleted'
 ```
 _______________________________________________________________________________
 
-Add this to the `.mise-tasks/dev.bash` file
+Add this to the `.mise-tasks/run-bin.bash` file
 ```bash
 #!/usr/bin/env bash
 
-#MISE description="🚀 Run the project"
+#MISE description="🤖 Run the binary of the project | alias = run"
 #MISE quiet=true
 
 #______________________________________________________________________________
 
-# STEP: 1 => Generate the build instructions
+# STEP: 1 => Generate the build instructions if they have not been generated
 
-# If there was an error generating the build instructions, 
-# it will be displayed. 
-if ! build_instruction_error_message=$(cmake -B build -G Ninja 2>&1); then
-    printf "\n%s\n\n" '❌ Failed to generate build instructions'
-    printf "%s\n" "$build_instruction_error_message"
-    exit 1
+if [ ! -d "build" ]; then
+    if ! build_instruction_error_message=$(cmake -B build -G Ninja 2>&1); then
+        printf "\n%s\n\n" '❌ Failed to generate build instructions:'
+        printf "%s\n" "$build_instruction_error_message"
+        exit 1
+    fi
 fi
+
 #______________________________________________________________________________
 
 # STEP: 2 => Build the project
 
-# If there was an error building the project,
-# it will be displayed. 
 if ! build_output_error_messages=$(cmake --build build 2>&1); then
     printf "\n%s\n\n" '❌ Failed to build project'
     printf "%s\n" "$build_output_error_messages"
     exit 1
 fi
+
 #______________________________________________________________________________
 
-# STEP: 3 => Run the project
+# STEP: 3 => Run the binary
 
-./build/cpp_project
-#______________________________________________________________________________
+./build/main
 ```
 _______________________________________________________________________________
 
-### Generate the build instructions
-
-Use `cmake` to convert the build instructions in the `CMakeLists.txt` file 
-into a format that can be used by `ninja`.
-
-```bash
-cmake -B build -G Ninja
+Add this to the end of the `mise.toml` file
+```toml
+[shell_alias]
+build = "mise build-all"
+clean = "mise clean"
+run = "mise run-bin"
 ```
+_______________________________________________________________________________
 
-#### Note: 
+The full `mise.toml` file should look like this:
+```toml
+[tools]
+clang = "latest"
+clang-format = "latest"
+cmake = "latest"
+ninja = "latest"
 
-- At this point, the program is not being compiled.
-
-- The `-B` flag allows you to specify the `Build Directory`. 
-This is the directory where the build instructions will be saved. 
-
-- In this example, I want the build instructions to be generated inside 
-a directory called `build`.
-
-- The `-G` flag allows you to specify the `Generator`. 
-This is the name of the tool that that you are telling cmake to generate
-the build instructions for.
-
-- In this examaple, I want the build output to be generated by `Ninja`.
-- Ensure that the name of the build system is capitalized.
-
+[shell_alias]
+build = "mise build-all"
+clean = "mise clean"
+run = "mise run-bin"
+```
 _______________________________________________________________________________
 
 ### To view a list of `mise tasks`, run this command
@@ -209,32 +239,9 @@ mise tasks
 
 You should get an output like this
 ```
-Name   Description                     
-build  👷 Build the project            
-clean  🧼 Delete the 'build' directory 
-dev    🚀 Run the project              
-```
-_______________________________________________________________________________
-
-### Build the program (Create an executable binary)
-
-```bash
-mise build
-```
-
-#### Note:
-- CMake does not compile the program. It simply acts as a trigger to let 
-the `ninja` program know that it should use the ninja-specific 
-build instructions from the `build` directory, to build the program 
-and create an executable binary.
-
-- CMake is a build system generator. You create a `CMakeLists.txt` file
-and it generates the build system for your compiler.
-_______________________________________________________________________________
-
-### Run the program (Run the executable binary)
-
-```bash
-mise dev
+Name       Description
+build-all  👷 Build the project | alias build
+clean      🧼 Delete the 'build' directory | alias = clean
+run-bin    🤖 Run the binary of the project | alias = run
 ```
 _______________________________________________________________________________

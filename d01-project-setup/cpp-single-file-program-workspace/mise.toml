@@ -1,9 +1,0 @@
-[tools]
-clang = "latest"
-clang-format = "latest"
-cmake = "latest"
-ninja = "latest"
-
-[shell_alias]
-build = "mise build-file"
-run = "mise run-bin"

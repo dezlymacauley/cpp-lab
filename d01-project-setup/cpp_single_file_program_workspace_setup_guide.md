@@ -14,8 +14,8 @@ Use `mise` to the set the project to use the latest version
 of `clang`, `clang-format`, `cmake`, and `ninja`
 ```bash
 mise use clang@latest
-mise use cmake@latest
 mise use clang-format@latest
+mise use cmake@latest
 mise use ninja@latest
 ```
 
@@ -44,6 +44,7 @@ touch programs/d02-topic-two/f01_charlie.cpp
 touch programs/d02-topic-two/f02_delta.cpp
 
 mkdir .mise-tasks 
+touch .mise-tasks/build-all.bash 
 touch .mise-tasks/build-file.bash 
 touch .mise-tasks/clean.bash 
 touch .mise-tasks/run-bin.bash 
@@ -56,10 +57,8 @@ Add this to the `programs/d01-topic-one/f01_alpha.cpp` file
 #include <iostream>
 
 int main() {
-
-  std::cout << "\nThis is f01_alpha.cpp\n\n";
-
-  return 0;
+    std::cout << "\nThis is f01_alpha.cpp\n\n";
+    return 0;
 }
 ```
 _______________________________________________________________________________
@@ -69,10 +68,8 @@ Add this to the `programs/d01-topic-one/f02_bravo.cpp` file
 #include <iostream>
 
 int main() {
-
-  std::cout << "\nThis is f02_bravo.cpp\n\n";
-
-  return 0;
+    std::cout << "\nThis is f02_bravo.cpp\n\n";
+    return 0;
 }
 ```
 _______________________________________________________________________________
@@ -82,10 +79,8 @@ Add this to the `programs/d02-topic-two/f01_charlie.cpp` file
 #include <iostream>
 
 int main() {
-
-  std::cout << "\nThis is f01_charlie.cpp\n\n";
-
-  return 0;
+    std::cout << "\nThis is f01_charlie.cpp\n\n";
+    return 0;
 }
 ```
 _______________________________________________________________________________
@@ -95,10 +90,8 @@ Add this to the `programs/d02-topic-two/f02_delta.cpp` file
 #include <iostream>
 
 int main() {
-
-  std::cout << "\nThis is f02_delta.cpp\n\n";
-
-  return 0;
+    std::cout << "\nThis is f02_delta.cpp\n\n";
+    return 0;
 }
 ```
 _______________________________________________________________________________
@@ -110,31 +103,64 @@ Add this to the `.gitignore` file
 ```
 _______________________________________________________________________________
 
-## Continue to update from Here
-
 Add this to the `CMakeLists.txt` file
 ```cmake
+# Sets the minimum version of CMake that is required to use 
+# this `CMakeLists.txt` file
+# To figure out what version of CMake your project is using, run this command:
+# cmake --version
 cmake_minimum_required(VERSION 4.4.3)
 
+# Sets the project name and lets CMake know that this project 
+# only uses C++ code. 
 project(cpp-single-file-workspace LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# This line is used to create a list of all the `.cpp` files in the project
+# that should be built, and then store 
+# that list as a variable that I have chosen to call `PROGRAMS_DIRECTORY`.
 
-# Find all .cpp files recursively inside the programs directory
-file(GLOB_RECURSE PROGRAM_SOURCES CONFIGURE_DEPENDS "programs/*.cpp")
+# `GLOB_RECURSE` and `"programs/*.cpp"` tell CMake 
+# to search for all `.cpp` files inside the "programs" directory,
+# including any sub-directories that contain `.cpp` files.
 
-foreach(SOURCE_FILE ${PROGRAM_SOURCES})
-    # Extract filename without extension (e.g., f01_alpha)
-    get_filename_component(TARGET_NAME ${SOURCE_FILE} NAME_WE)
+# `CONFIGURE_DEPENDS` tells CMake to check the file system of the project 
+# for changes before building the project. So if you add, delete, or rename,
+# things inside the `programs` directory,
+# CMake will ensure that the variable `PROGRAMS_DIRECTORY` is updated.
+file(GLOB_RECURSE PROGRAMS_DIRECTORY CONFIGURE_DEPENDS "programs/*.cpp")
+
+# This is a `foreach` loop in CMake.
+# It allows CMAKE to to perform a set of actions for each `.cpp` file in the
+# the `programs` directory.
+foreach(CPP_FILE ${PROGRAMS_DIRECTORY})
+
+    # A `.cpp` file is built, a binary executable is created.
+    # The line below allows you to set the name of the binary executable
+    # in advance, and store it in a variable called `BINARY_NAME`.
+    # `${CPP_FILE} NAME_WE` means that the `BINARY_NAME` is equal to the C++ file
+    # without the extension.
+    # So if CPP_FILE = f01_alpha.cpp, and BINARY_NAME = f01_alpha
+    get_filename_component(BINARY_NAME ${CPP_FILE} NAME_WE)
+
+    # This is where you list what should be built and from which `.cpp` file
+    # E.g. Build `f01_alpha` from `f01_alpha.cpp`
+    add_executable(${BINARY_NAME} ${CPP_FILE})
     
-    # Register each source file as its own standalone executable target
-    add_executable(\({TARGET_NAME}\){SOURCE_FILE})
+    # This is where you specify build settings.
+    # `PRIVATE cxx_std_17` tells CMake what C++ standard should 
+    # be used to build this specific binary.
+
+    # You can use the website below to view a list a valid C++ standards.
+    # I recommend using the second latest one unless you need a feature 
+    # from the latest one:
+    # https://www.cplusplus-language.org/
+    target_compile_features(${BINARY_NAME} PRIVATE cxx_std_17)
+
 endforeach()
 ```
 _______________________________________________________________________________
 
-Add this to the `.mise-tasks/build-all.bash` file
+### Add this to the `.mise-tasks/build-all.bash` file
 ```bash
 #!/usr/bin/env bash
 
@@ -143,12 +169,14 @@ Add this to the `.mise-tasks/build-all.bash` file
 
 #______________________________________________________________________________
 
-# STEP: 1 => Generate the build instructions
+# STEP: 1 => Generate the build instructions if they have not been generated
 
-if ! build_instruction_error_message=$(cmake -B build -G Ninja 2>&1); then
-    printf "\n%s\n\n" '❌ Failed to generate build instructions:'
-    printf "%s\n" "$build_instruction_error_message"
-    exit 1
+if [ ! -d "build" ]; then
+    if ! build_instruction_error_message=$(cmake -B build -G Ninja 2>&1); then
+        printf "\n%s\n\n" '❌ Failed to generate build instructions:'
+        printf "%s\n" "$build_instruction_error_message"
+        exit 1
+    fi
 fi
 
 #______________________________________________________________________________
@@ -182,27 +210,27 @@ if [ -z "$1" ]; then
     printf "\n%s\n" '❌ Error:'
     printf "%s\n\n" 'You did not specify which .cpp file to build'
     printf "%s\n" 'Usage:'
-    printf "%s\n\n" 'mise buildbin f01_alpha.cpp'
+    printf "%s\n\n" 'mise build-file f01_alpha.cpp'
     exit 1
 fi
 
 BINARY_NAME=$(basename "$1" .cpp)
 #______________________________________________________________________________
 
-# STEP: 2 => Generate the build instructions
+# STEP: 2 => Generate the build instructions if they have not been generated
 
-if ! build_instruction_error_message=$(cmake -B build -G Ninja 2>&1); then
-    printf "\n%s\n\n" '❌ Failed to generate build instructions:'
-    printf "%s\n" "$build_instruction_error_message"
-    exit 1
+if [ ! -d "build" ]; then
+    if ! cmake -B build -G Ninja &> /dev/null; then
+        printf "\n%s\n\n" '❌ Failed to generate build instructions'
+        exit 1
+    fi
 fi
 #______________________________________________________________________________
 
-# STEP: 3 => Build the project
+# STEP: 3 => Build the specific file
 
-if ! build_output_error_messages=$(cmake --build build --target "$BINARY_NAME" 2>&1); then
+if ! cmake --build build --target "$BINARY_NAME" &> /dev/null; then
     printf "\n%s\n\n" "❌ Failed to build target: $BINARY_NAME"
-    printf "%s\n" "$build_output_error_messages"
     exit 1
 fi
 #______________________________________________________________________________
@@ -215,7 +243,7 @@ Add this to the `.mise-tasks/clean.bash` file
 ```bash
 #!/usr/bin/env bash
 
-#MISE description="🧼 Delete the 'build' directory"
+#MISE description="🧼 Delete the 'build' directory | alias clean"
 #MISE quiet=true
 
 if [ ! -d build ]; then
@@ -237,41 +265,41 @@ Add this to the `.mise-tasks/run-bin.bash` file
 
 #______________________________________________________________________________
 
-# STEP: 1 => Create a name for the binary
+# STEP: 1 => Create a name for the specific binary that should be built
 
 if [ -z "$1" ]; then
     printf "\n%s\n" '❌ Error:'
     printf "%s\n\n" 'You did not specify which .cpp file to build'
     printf "%s\n" 'Usage:'
-    printf "%s\n\n" 'mise buildbin f01_alpha.cpp'
+    printf "%s\n\n" 'mise run-bin f01_alpha.cpp'
     exit 1
 fi
 
 BINARY_NAME=$(basename "$1" .cpp)
 #______________________________________________________________________________
 
-# STEP: 2 => Generate the build instructions
+# STEP: 2 => Generate the build instructions if they have not been generated
 
-if ! build_instruction_error_message=$(cmake -B build -G Ninja 2>&1); then
-    printf "\n%s\n\n" '❌ Failed to generate build instructions:'
-    printf "%s\n" "$build_instruction_error_message"
-    exit 1
+if [ ! -d "build" ]; then
+    if ! cmake -B build -G Ninja &> /dev/null; then
+        printf "\n%s\n\n" '❌ Failed to generate build instructions'
+        exit 1
+    fi
 fi
+
 #______________________________________________________________________________
 
-# STEP: 3 => Build the project
+# STEP: 3 => Build the specific file
 
-if ! build_output_error_messages=$(cmake --build build --target "$BINARY_NAME" 2>&1); then
+if ! cmake --build build --target "$BINARY_NAME" &> /dev/null; then
     printf "\n%s\n\n" "❌ Failed to build target: $BINARY_NAME"
-    printf "%s\n" "$build_output_error_messages"
     exit 1
 fi
 #______________________________________________________________________________
 
-# STEP: 4 => Run the project
+# STEP: 4 => Run the binary
 
 ./build/"$BINARY_NAME"
-#______________________________________________________________________________
 ```
 _______________________________________________________________________________
 
@@ -279,6 +307,7 @@ Add this to the end of the `mise.toml` file
 ```toml
 [shell_alias]
 build = "mise build-file"
+clean = "mise clean"
 run = "mise run-bin"
 ```
 _______________________________________________________________________________
@@ -293,6 +322,7 @@ ninja = "latest"
 
 [shell_alias]
 build = "mise build-file"
+clean = "mise clean"
 run = "mise run-bin"
 ```
 _______________________________________________________________________________
@@ -307,7 +337,7 @@ You should get an output like this
 Name        Description
 build-all   👷 Build all programs in the workspace
 build-file  👷 Build a specific .cpp file | alias = build
-clean       🧼 Delete the 'build' directory
+clean       🧼 Delete the 'build' directory | alias = clean
 run-bin     🤖 Run the binary of a .cpp file | alias = run
 ```
 _______________________________________________________________________________
