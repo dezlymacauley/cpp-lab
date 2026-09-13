@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 
-#MISE description="👷 Build a specific .cpp file | alias = build"
+#MISE description="🤖 Run the binary of a .cpp file | alias = run"
 #MISE quiet=true
 
 #______________________________________________________________________________
 
-# STEP: 1 => Create a name for the binary
+# STEP: 1 => Create a name for the specific binary that should be built
 
 if [ -z "$1" ]; then
     printf "\n%s\n" '❌ Error:'
     printf "%s\n\n" 'You did not specify which .cpp file to build'
     printf "%s\n" 'Usage:'
-    printf "%s\n\n" 'mise build-file f01_alpha.cpp'
+    printf "%s\n\n" 'mise run-bin f01_alpha.cpp'
     exit 1
 fi
 
@@ -26,6 +26,7 @@ if [ ! -d "build" ]; then
         exit 1
     fi
 fi
+
 #______________________________________________________________________________
 
 # STEP: 3 => Build the specific file
@@ -36,4 +37,6 @@ if ! cmake --build build --target "$BINARY_NAME" &> /dev/null; then
 fi
 #______________________________________________________________________________
 
-printf "\n%s\n\n" "✅ $BINARY_NAME has been built"
+# STEP: 4 => Run the binary
+
+./build/"$BINARY_NAME"

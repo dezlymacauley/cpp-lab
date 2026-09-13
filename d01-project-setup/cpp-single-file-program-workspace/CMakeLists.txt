@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 4.4.3)
 
 # Sets the project name and lets CMake know that this project 
 # only uses C++ code. 
-project(d01-single-file-programs LANGUAGES CXX)
+project(cpp-single-file-workspace LANGUAGES CXX)
 
 # This line is used to create a list of all the `.cpp` files in the project
 # that should be built, and then store 
