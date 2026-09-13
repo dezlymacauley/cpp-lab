@@ -123,7 +123,7 @@ _______________________________________________________________________________
 ```bash
 #!/usr/bin/env bash
 
-#MISE description="👷 Build the project | alias build"
+#MISE description="👷 Build the project | alias = build"
 #MISE quiet=true
 
 #______________________________________________________________________________
