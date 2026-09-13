@@ -5,8 +5,8 @@ _______________________________________________________________________________
 _______________________________________________________________________________
 
 ```bash
-mkdir cpp-project-setup-guide
-cd cpp-project-setup-guide
+mkdir cpp-project
+cd cpp-project
 ```
 _______________________________________________________________________________
 
@@ -72,50 +72,21 @@ cmake_minimum_required(VERSION 4.4.3)
 
 # Sets the project name and lets CMake know that this project 
 # only uses C++ code. 
-project(cpp-single-file-workspace LANGUAGES CXX)
+project(cpp-project LANGUAGES CXX)
 
-# This line is used to create a list of all the `.cpp` files in the project
-# that should be built, and then store 
-# that list as a variable that I have chosen to call `SRC_DIRECTORY`.
+# This will create a binary executable called `cpp-single-file-workspace`,
+# from `src/main.cpp`
+add_executable(cpp-project "src/main.cpp")
 
-# `GLOB_RECURSE` and `"src/*.cpp"` tell CMake 
-# to search for all `.cpp` files inside the "src" directory,
-# including any sub-directories that contain `.cpp` files.
+# This is where you specify build settings.
+# `PRIVATE cxx_std_17` tells CMake what C++ standard should 
+# be used to build this specific binary.
 
-# `CONFIGURE_DEPENDS` tells CMake to check the file system of the project 
-# for changes before building the project. So if you add, delete, or rename,
-# things inside the `src` directory,
-# CMake will ensure that the variable `SRC_DIRECTORY` is updated.
-file(GLOB_RECURSE SRC_DIRECTORY CONFIGURE_DEPENDS "src/*.cpp")
-
-# This is a `foreach` loop in CMake.
-# It allows CMAKE to to perform a set of actions for each `.cpp` file in the
-# the `src` directory.
-foreach(CPP_FILE ${SRC_DIRECTORY})
-
-    # A `.cpp` file is built, a binary executable is created.
-    # The line below allows you to set the name of the binary executable
-    # in advance, and store it in a variable called `BINARY_NAME`.
-    # `${CPP_FILE} NAME_WE` means that the `BINARY_NAME` is equal to the C++ file
-    # without the extension.
-    # So if CPP_FILE = f01_alpha.cpp, and BINARY_NAME = f01_alpha
-    get_filename_component(BINARY_NAME ${CPP_FILE} NAME_WE)
-
-    # This is where you list what should be built and from which `.cpp` file
-    # E.g. Build `f01_alpha` from `f01_alpha.cpp`
-    add_executable(${BINARY_NAME} ${CPP_FILE})
-    
-    # This is where you specify build settings.
-    # `PRIVATE cxx_std_17` tells CMake what C++ standard should 
-    # be used to build this specific binary.
-
-    # You can use the website below to view a list a valid C++ standards.
-    # I recommend using the second latest one unless you need a feature 
-    # from the latest one:
-    # https://www.cplusplus-language.org/
-    target_compile_features(${BINARY_NAME} PRIVATE cxx_std_17)
-
-endforeach()
+# You can use the website below to view a list a valid C++ standards.
+# I recommend using the second latest one unless you need a feature 
+# from the latest one:
+# https://www.cplusplus-language.org/
+target_compile_features(cpp-project PRIVATE cxx_std_17)
 ```
 _______________________________________________________________________________
 
@@ -204,7 +175,7 @@ fi
 
 # STEP: 3 => Run the binary
 
-./build/main
+./build/cpp-project
 ```
 _______________________________________________________________________________
 
