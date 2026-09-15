@@ -1,5 +1,13 @@
+[env]
+PROJECT_NAME = "cmake-explained"
+
 [tools]
 clang = "latest"
 clang-format = "latest"
 cmake = "latest"
 ninja = "latest"
+
+[shell_alias]
+build = "mise build"
+clean = "mise clean"
+run = "mise run-bin"
