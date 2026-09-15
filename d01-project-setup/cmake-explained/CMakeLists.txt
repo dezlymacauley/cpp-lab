@@ -1,4 +1,19 @@
 
+# How to set optional messages
+
+option(
+    SHOW_DEZLY_MACAULEY 
+    "Show Dezly Macauley in the terminal when building"
+    OFF
+)
+
+if (SHOW_DEZLY_MACAULEY)
+    # This will show "Dezly Macauley in the terminal when building the project"
+    message("\nDezly Macauley\n")
+endif()
+
+#______________________________________________________________________________
+
 # The minimum version of CMake needed to use this file
 cmake_minimum_required(VERSION 4.4.3)
 #______________________________________________________________________________
