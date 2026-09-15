@@ -1,7 +1,10 @@
 #include <iostream>
 
+#include "my_lib.hpp"
+
 int main() {
-    std::cout << "\nCMake Explained\n\n";
+
+    print_cmake_explained();
 
     return 0;
 }
