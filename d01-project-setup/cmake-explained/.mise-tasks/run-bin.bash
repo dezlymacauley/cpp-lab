@@ -29,4 +29,4 @@ fi
 
 # STEP: 3 => Run the binary
 
-./build/"$PROJECT_NAME"
+./build/app/"$PROJECT_NAME"
