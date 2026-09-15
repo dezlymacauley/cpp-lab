@@ -1,5 +1,5 @@
 [env]
-PROJECT_NAME = "d04-directories-that-contain-sub-directories-v3"
+PROJECT_NAME = "d05-my-prefered-method"
 
 [tools]
 clang = "latest"

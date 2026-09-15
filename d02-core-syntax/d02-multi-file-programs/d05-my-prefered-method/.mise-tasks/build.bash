@@ -7,20 +7,28 @@
 
 # STEP: 1 => Create a command to generate the build instructions
 
+# This specifies that the build instructions should be generated for Ninja
+GENERATOR=(-G Ninja)
+
+# This specifies that `clang++` is the compiler that `Ninja` 
+# should use to build the project
+COMPILER=(-DCMAKE_CXX_COMPILER=clang++)
+
+# This specifies where the build instructions should be saved
+BUILD_DIR=(-B build)
+
 # I've named it `GBI_COMMAND`, 
 # which is short for `Generate Build Instructions`
+GBI_COMMAND=(cmake "${GENERATOR[@]}" "${COMPILER[@]}" "${BUILD_DIR[@]}")
 
-GENERATOR=(-G Ninja)
-COMPILER=(DCMAKE_CXX_COMPILER=clang++)
-
-BUILD_GENERATION_COMMAND=(cmake -G Ninja -DCMAKE_CXX_COMPILER=clang++ -B build)
+# So GBI_COMMAND=(cmake -G Ninja -DCMAKE_CXX_COMPILER=clang++ -B build)
 
 #______________________________________________________________________________
 
 # STEP: 2 => Generate the build instructions if they have not been generated
 
 if [ ! -d "build" ]; then
-    if ! build_instruction_error_message=$(cmake -B build -G Ninja 2>&1); then
+    if ! build_instruction_error_message=$("${GBI_COMMAND[@]}" 2>&1); then
         printf "\n%s\n\n" '❌ Failed to generate build instructions:'
         printf "%s\n" "$build_instruction_error_message"
         exit 1
