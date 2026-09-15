@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#MISE description="👷 Build the project | alias = build"
+#MISE description="👷 Build the program | alias = build"
 #MISE quiet=true
 
 #______________________________________________________________________________
@@ -27,4 +27,4 @@ fi
 
 #______________________________________________________________________________
 
-printf "\n%s\n\n" '✅ All programs in the workspace have been built'
+printf "\n%s\n\n" '✅ The program has been built'

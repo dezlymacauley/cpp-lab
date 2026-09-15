@@ -1,3 +1,6 @@
+[env]
+PROJECT_NAME = "d01-file-based-program-separation"
+
 [tools]
 clang = "latest"
 clang-format = "latest"
@@ -5,6 +8,6 @@ cmake = "latest"
 ninja = "latest"
 
 [shell_alias]
-build = "mise build-all"
+build = "mise build"
 clean = "mise clean"
 run = "mise run-bin"

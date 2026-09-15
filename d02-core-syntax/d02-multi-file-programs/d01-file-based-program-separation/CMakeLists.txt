@@ -1,37 +1,48 @@
-# Sets the minimum version of CMake that is required to use 
-# this `CMakeLists.txt` file
-# To figure out what version of CMake your project is using, run this command:
-# cmake --version
+
+# The minimum version of CMake needed to use this file
 cmake_minimum_required(VERSION 4.4.3)
+#______________________________________________________________________________
 
-# Sets the project name and lets CMake know that this project 
-# only uses C++ code. 
-project(d01-file-based-program-separation LANGUAGES CXX)
+# `$ENV{PROJECT_NAME}` tells CMake that `PROJECT_NAME` is an environment
+# variable. CMake will get the value of `PROJECT_NAME` 
+# from the `[env]` section of the `mise.toml` file
+# You could just write the project name directly like this
+# project("cmake-explained" LANGUAGES CXX)
+# But I prefer to use an environment variable so that if I ever change 
+# the project name, I only need to update the `mise.toml` file.
 
-# This line is used to create a list of all the `.cpp` files in the project
-# that should be built, and then store 
-# that list as a variable that I have chosen to call `SRC_DIRECTORY`.
+# `LANGUAGES CXX` means that this project only used C++
+project($ENV{PROJECT_NAME} LANGUAGES CXX)
 
-# `GLOB_RECURSE` and `"src/*.cpp"` tell CMake 
-# to search for all `.cpp` files inside the "programs" directory,
-# including any sub-directories that contain `.cpp` files.
+#______________________________________________________________________________
 
-# `CONFIGURE_DEPENDS` tells CMake to check the file system of the project 
-# for changes before building the project. So if you add, delete, or rename,
-# things inside the `src` directory,
-# CMake will ensure that the variable `SRC_DIRECTORY` is updated.
-file(GLOB_RECURSE SRC_DIRECTORY CONFIGURE_DEPENDS "src/*.cpp")
+# This is where you list the files that should be turned into libraries.
+# A library is a file that is not meant to be used as a standalone
+# binary executable. It is a file that is meant to be imported into a program.
 
-# This will create a binary executable called `d01-file-based-separation`,
-# from all the `.cpp` files in the `src` directory
-add_executable(d01-file-based-program-separation ${SRC_DIRECTORY})
+# This will create a static library called `my_lib` from the `my_lib.cpp` file
+add_library(my_lib STATIC my_lib.cpp)
 
-# This is where you specify build settings.
-# `PRIVATE cxx_std_17` tells CMake what C++ standard should 
-# be used to build this specific binary.
+# NOTE: This will not add `my_lib` to the program.
+# It only creates a library that can be imported.
+# Remember to link libraries to the programs that need to use them.
 
-# You can use the website below to view a list a valid C++ standards.
-# I recommend using the second latest one unless you need a feature 
-# from the latest one:
-# https://www.cplusplus-language.org/
-target_compile_features(d01-file-based-program-separation PRIVATE cxx_std_17)
+#______________________________________________________________________________
+
+# This is where you list files that have to be turned into 
+# a binary executable.
+
+# This will create a binary executable from `main.cpp`
+# The name of the binaray executable will be whatever `PROJECT_NAME` 
+# has been is set to in the `mise.toml` file
+add_executable($ENV{PROJECT_NAME} main.cpp)
+#______________________________________________________________________________
+
+# This is where you link libraries to the program
+
+# This will add the `my_lib` library to the program
+# `PRIVATE` tells CMake that `my_lib` is only used by the program.
+# This is the correct setting because the program `$ENV{PROJECT_NAME}` is
+# a binary executable and is not meant to be imported into another program.
+target_link_libraries($ENV{PROJECT_NAME} PRIVATE my_lib)
+#______________________________________________________________________________

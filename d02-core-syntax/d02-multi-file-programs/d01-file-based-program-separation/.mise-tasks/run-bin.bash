@@ -29,4 +29,4 @@ fi
 
 # STEP: 3 => Run the binary
 
-./build/d01-file-based-program-separation
+./build/"$PROJECT_NAME"
