@@ -1,5 +1,5 @@
 [env]
-PROJECT_NAME = "cmake-explained"
+PROJECT_NAME = "d03-directories-that-contain-sub-directories-v1"
 
 [tools]
 clang = "latest"
