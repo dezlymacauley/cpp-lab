@@ -2,7 +2,7 @@
 
 int main() {
 
-    print_cmake_explained();
+    print_hello_world();
 
     return 0;
 }

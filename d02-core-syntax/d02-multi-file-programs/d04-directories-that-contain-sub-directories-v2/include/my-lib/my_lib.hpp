@@ -1,3 +1,3 @@
 #pragma once
 
-void print_cmake_explained();
+void print_hello_world();
