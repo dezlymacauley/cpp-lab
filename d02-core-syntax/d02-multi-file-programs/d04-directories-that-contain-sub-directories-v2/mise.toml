@@ -1,0 +1,13 @@
+[env]
+PROJECT_NAME = "d04-directories-that-contain-sub-directories-v2"
+
+[tools]
+clang = "latest"
+clang-format = "latest"
+cmake = "latest"
+ninja = "latest"
+
+[shell_alias]
+build = "mise build"
+clean = "mise clean"
+run = "mise run-bin"
