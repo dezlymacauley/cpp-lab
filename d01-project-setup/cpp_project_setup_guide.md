@@ -62,12 +62,16 @@ _______________________________________________________________________________
 Create the project structure
 
 ```bash
-touch .gitignore CMakeLists.txt main.cpp 
+touch .clang-format .gitignore CMakeLists.txt
+
 mkdir .mise-tasks
 touch .mise-tasks/build.bash
 touch .mise-tasks/clean.bash
 touch .mise-tasks/run-bin.bash
 chmod +x .mise-tasks/*.bash
+
+mkdir src
+touch src/main.cpp
 ```
 
 ##### Note:
@@ -79,6 +83,7 @@ This is the project structure
 ```
 .
 ├── CMakeLists.txt
+├── .clang-format
 ├── .gitignore
 ├── main.cpp
 ├── .mise-tasks
@@ -175,6 +180,12 @@ project($ENV{PROJECT_NAME} LANGUAGES CXX)
 
 # Declares that a binary executable should be created from `main.cpp`
 add_executable($ENV{BINARY_NAME} main.cpp)
+```
+_______________________________________________________________________________
+
+Add this to the `.clang-format` file
+```yaml
+IndentWidth: 4
 ```
 _______________________________________________________________________________
 

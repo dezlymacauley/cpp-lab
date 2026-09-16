@@ -13,5 +13,5 @@ cmake_minimum_required(VERSION 4.4.3)
 # Sets the project name, and specifies that this project uses C++
 project($ENV{PROJECT_NAME} LANGUAGES CXX)
 
-# Declares that a binary executable should be created from `main.cpp`
-add_executable($ENV{BINARY_NAME} main.cpp)
+# Declares that a binary executable should be created from `src/main.cpp`
+add_executable($ENV{BINARY_NAME} src/main.cpp)

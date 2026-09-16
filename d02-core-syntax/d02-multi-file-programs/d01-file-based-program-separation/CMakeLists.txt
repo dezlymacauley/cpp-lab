@@ -1,48 +1,35 @@
+# SECTION: Environment Variables
 
-# The minimum version of CMake needed to use this file
-cmake_minimum_required(VERSION 4.4.3)
+# The following environment variables are declared in the `mise.toml` file:
+# PROJECT_NAME
+# BINARY_NAME
+
 #______________________________________________________________________________
 
-# `$ENV{PROJECT_NAME}` tells CMake that `PROJECT_NAME` is an environment
-# variable. CMake will get the value of `PROJECT_NAME` 
-# from the `[env]` section of the `mise.toml` file
-# You could just write the project name directly like this
-# project("cmake-explained" LANGUAGES CXX)
-# But I prefer to use an environment variable so that if I ever change 
-# the project name, I only need to update the `mise.toml` file.
+# SECTION: Basic Settings
 
-# `LANGUAGES CXX` means that this project only used C++
+# The minimum version of CMake required to create build instructions
+# in this project
+cmake_minimum_required(VERSION 4.4.3)
+
+# Sets the project name, and specifies that this project uses C++
 project($ENV{PROJECT_NAME} LANGUAGES CXX)
 
 #______________________________________________________________________________
 
-# This is where you list the files that should be turned into libraries.
-# A library is a file that is not meant to be used as a standalone
-# binary executable. It is a file that is meant to be imported into a program.
+# SECTION: Declaring the files that should be compiled
 
-# This will create a static library called `my_lib` from the `my_lib.cpp` file
+# This will create a library called `my_lib` from the `my_lib.cpp` file
 add_library(my_lib STATIC my_lib.cpp)
 
-# NOTE: This will not add `my_lib` to the program.
-# It only creates a library that can be imported.
-# Remember to link libraries to the programs that need to use them.
+# Declares that a binary executable should be created from `main.cpp`
+add_executable($ENV{BINARY_NAME} main.cpp)
 
 #______________________________________________________________________________
 
-# This is where you list files that have to be turned into 
-# a binary executable.
+# SECTION: Adding compiled libraries to the program
 
-# This will create a binary executable from `main.cpp`
-# The name of the binaray executable will be whatever `PROJECT_NAME` 
-# has been is set to in the `mise.toml` file
-add_executable($ENV{PROJECT_NAME} main.cpp)
-#______________________________________________________________________________
+# The will add the library `my_lib` to the program
+target_link_libraries($ENV{BINARY_NAME} PUBLIC my_lib)
 
-# This is where you link libraries to the program
-
-# This will add the `my_lib` library to the program
-# `PRIVATE` tells CMake that `my_lib` is only used by the program.
-# This is the correct setting because the program `$ENV{PROJECT_NAME}` is
-# a binary executable and is not meant to be imported into another program.
-target_link_libraries($ENV{PROJECT_NAME} PRIVATE my_lib)
 #______________________________________________________________________________
