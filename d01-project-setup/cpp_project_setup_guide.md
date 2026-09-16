@@ -9,11 +9,12 @@ _______________________________________________________________________________
 
 Use `mise` to add the following tools to the project:
 - `cmake`, `cmake-language-server`,
+- `ninja`
 - `clang++`, `clangd`, `clang-format`
 
 ```bash
 mise use cmake@latest
-mise use pipx:cmake-language-server@latest
+mise use "pipx:cmake-language-server[uvx_args=--with pygls\<2]@latest"
 
 mise use ninja@latest
 
@@ -32,7 +33,7 @@ and then trigger that build generator to use a C++ compiler
 to build the project.
 
 ##### `cmake-language-server`
-- This provides language support for `CMakeList.txt` files
+- This provides language support for `CMakeLists.txt` files
 
 ##### `ninja`
 - This the build generator that will use a C++ compiler to build the project. 
@@ -56,6 +57,25 @@ _______________________________________________________________________________
 Create the project structure
 
 ```bash
-touch .gitignore main.cpp
+touch .gitignore CMakeLists.txt main.cpp 
+```
+_______________________________________________________________________________
+
+Add this to the `.gitignore` file
+```bash
+# Build Output
+/build/
+```
+_______________________________________________________________________________
+
+Add this to the `main.cpp` file
+```cpp
+#include <iostream>
+
+int main() {
+    std::cout << "\nC++ Project\n";
+
+    return 0;
+}
 ```
 _______________________________________________________________________________
