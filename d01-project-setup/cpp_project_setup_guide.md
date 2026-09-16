@@ -14,7 +14,7 @@ Use `mise` to add the following tools to the project:
 
 ```bash
 mise use cmake@latest
-mise use "pipx:cmake-language-server[uvx_args=--with pygls\<2]@latest"
+mise use "pipx:cmake-language-server[uvx_args=--with pygls<2]@latest"
 
 mise use ninja@latest
 
