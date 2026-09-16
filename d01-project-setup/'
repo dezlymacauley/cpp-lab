@@ -53,9 +53,9 @@ the official GitHub repository.
 - It is available on the mise registry, so no prefix is required
 _______________________________________________________________________________
 
-Create the project structure
+Create a `main.cpp` file
 
 ```bash
-touch .gitignore main.cpp
+touch main.cpp
 ```
 _______________________________________________________________________________

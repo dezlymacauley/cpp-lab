@@ -1,4 +1,7 @@
 [tools]
 clang-format = "latest"
+cmake = "latest"
 "conda:clangxx" = "latest"
 "github:clangd/clangd" = "latest"
+ninja = "latest"
+"pipx:cmake-language-server" = "latest"
