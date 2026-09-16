@@ -1,0 +1,4 @@
+[tools]
+clang-format = "latest"
+"conda:clangxx" = "latest"
+"github:clangd/clangd" = "latest"
