@@ -4,4 +4,3 @@ cmake = "latest"
 "conda:clangxx" = "latest"
 "github:clangd/clangd" = "latest"
 ninja = "latest"
-"pipx:cmake-language-server" = { version = "latest", uvx_args = '--with pygls\<2' }
