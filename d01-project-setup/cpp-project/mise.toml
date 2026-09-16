@@ -1,3 +1,4 @@
+
 [tools]
 clang-format = "latest"
 cmake = "latest"
@@ -5,3 +6,31 @@ cmake = "latest"
 "github:clangd/clangd" = "latest"
 ninja = "latest"
 "pipx:cmake-language-server" = { version = "latest", uvx_args = "--with pygls<2" }
+
+#______________________________________________________________________________
+
+[env]
+GENERATOR = "Ninja"
+COMPILER = "clang++"
+BUILD_DIR = "build"
+BINARY_NAME = "cpp-project"
+
+# This is the command that will generate the build instructions
+CMAKE_GBI_CMD = """
+cmake \
+    -G {{env.GENERATOR}} \
+    -DCMAKE_CXX_COMPILER={{env.COMPILER}} \
+    -B {{env.BUILD_DIR}}
+"""
+
+# This is the command that will build the project
+CMAKE_BUILD_CMD = """
+cmake --build {{env.BUILD_DIR}}
+"""
+#______________________________________________________________________________
+
+[shell_alias]
+build = "mise build"
+clean = "mise clean"
+run = "mise run-bin"
+#______________________________________________________________________________

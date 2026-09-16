@@ -34,6 +34,11 @@ to build the project.
 
 ##### `cmake-language-server`
 - This provides language support for `CMakeLists.txt` files
+- This is a Python program so you install it with the `pipx:` prefix
+which actually uses `uv` (A Rust-powered package manager) to install
+it from PyPi (the Python repository)
+- `[uvx_args=--with pygls<2]@latest` is needed 
+because `cmake-language-server` does not support `pygls version 2 and above`
 
 ##### `ninja`
 - This the build generator that will use a C++ compiler to build the project. 
@@ -58,6 +63,90 @@ Create the project structure
 
 ```bash
 touch .gitignore CMakeLists.txt main.cpp 
+mkdir .mise-tasks
+touch .mise-tasks/build.bash
+touch .mise-tasks/clean.bash
+touch .mise-tasks/run-bin.bash
+chmod +x .mise-tasks/*.bash
+```
+
+##### Note:
+- You are not allowed to create a `.mise-tasks/run.bash` file because
+`mise run` is a reserved command in `mise`, that's why I called it `run-bin`
+_______________________________________________________________________________
+
+Add this to the end of the `mise.toml` file
+
+```toml
+
+#______________________________________________________________________________
+
+[env]
+GENERATOR = "Ninja"
+COMPILER = "clang++"
+BUILD_DIR = "build"
+BINARY_NAME = "cpp-project"
+
+# This is the command that will generate the build instructions
+CMAKE_GBI_CMD = """
+cmake \
+    -G {{env.GENERATOR}} \
+    -DCMAKE_CXX_COMPILER={{env.COMPILER}} \
+    -B {{env.BUILD_DIR}}
+"""
+
+# This is the command that will build the project
+CMAKE_BUILD_CMD = """
+cmake --build {{env.BUILD_DIR}}
+"""
+#______________________________________________________________________________
+
+[shell_alias]
+build = "mise build"
+clean = "mise clean"
+run = "mise run-bin"
+#______________________________________________________________________________
+```
+_______________________________________________________________________________
+
+The full `mise.toml` file should look like this now
+```toml
+
+[tools]
+clang-format = "latest"
+cmake = "latest"
+"conda:clangxx" = "latest"
+"github:clangd/clangd" = "latest"
+ninja = "latest"
+"pipx:cmake-language-server" = { version = "latest", uvx_args = "--with pygls<2" }
+
+#______________________________________________________________________________
+
+[env]
+GENERATOR = "Ninja"
+COMPILER = "clang++"
+BUILD_DIR = "build"
+BINARY_NAME = "cpp-project"
+
+# This is the command that will generate the build instructions
+CMAKE_GBI_CMD = """
+cmake \
+    -G {{env.GENERATOR}} \
+    -DCMAKE_CXX_COMPILER={{env.COMPILER}} \
+    -B {{env.BUILD_DIR}}
+"""
+
+# This is the command that will build the project
+CMAKE_BUILD_CMD = """
+cmake --build {{env.BUILD_DIR}}
+"""
+#______________________________________________________________________________
+
+[shell_alias]
+build = "mise build"
+clean = "mise clean"
+run = "mise run-bin"
+#______________________________________________________________________________
 ```
 _______________________________________________________________________________
 
@@ -77,5 +166,15 @@ int main() {
 
     return 0;
 }
+```
+_______________________________________________________________________________
+
+Add this to the `CMakeLists.txt` file
+```cmake
+cmake_minimum_required(VERSION 4.4.3)
+
+project(cpp-project LANGUAGES CXX)
+
+add_executable(cpp-project main.cpp)
 ```
 _______________________________________________________________________________
