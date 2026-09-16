@@ -75,42 +75,22 @@ chmod +x .mise-tasks/*.bash
 `mise run` is a reserved command in `mise`, that's why I called it `run-bin`
 _______________________________________________________________________________
 
-Add this to the end of the `mise.toml` file
-
+Your `mise.toml` file should look like this now
 ```toml
-
-#______________________________________________________________________________
-
-[env]
-GENERATOR = "Ninja"
-COMPILER = "clang++"
-BUILD_DIR = "build"
-BINARY_NAME = "cpp-project"
-
-# This is the command that will generate the build instructions
-CMAKE_GBI_CMD = """
-cmake \
-    -G {{env.GENERATOR}} \
-    -DCMAKE_CXX_COMPILER={{env.COMPILER}} \
-    -B {{env.BUILD_DIR}}
-"""
-
-# This is the command that will build the project
-CMAKE_BUILD_CMD = """
-cmake --build {{env.BUILD_DIR}}
-"""
-#______________________________________________________________________________
-
-[shell_alias]
-build = "mise build"
-clean = "mise clean"
-run = "mise run-bin"
-#______________________________________________________________________________
+[tools]
+clang-format = "latest"
+cmake = "latest"
+"conda:clangxx" = "latest"
+"github:clangd/clangd" = "latest"
+ninja = "latest"
+"pipx:cmake-language-server" = { version = "latest", uvx_args = "--with pygls<2" }
 ```
 _______________________________________________________________________________
 
-The full `mise.toml` file should look like this now
+Update your `mise.toml` file to look like this
 ```toml
+
+#______________________________________________________________________________
 
 [tools]
 clang-format = "latest"
@@ -140,6 +120,8 @@ cmake \
 CMAKE_BUILD_CMD = """
 cmake --build {{env.BUILD_DIR}}
 """
+
+RUN_BINARY_CMD = "./{{env.BUILD_DIR}}/{{env.BINARY_NAME}}"
 #______________________________________________________________________________
 
 [shell_alias]

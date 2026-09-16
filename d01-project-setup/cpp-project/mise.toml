@@ -1,4 +1,6 @@
 
+#______________________________________________________________________________
+
 [tools]
 clang-format = "latest"
 cmake = "latest"
@@ -27,6 +29,8 @@ cmake \
 CMAKE_BUILD_CMD = """
 cmake --build {{env.BUILD_DIR}}
 """
+
+RUN_BINARY_CMD = "./{{env.BUILD_DIR}}/{{env.BINARY_NAME}}"
 #______________________________________________________________________________
 
 [shell_alias]
