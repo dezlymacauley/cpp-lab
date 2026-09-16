@@ -75,6 +75,20 @@ chmod +x .mise-tasks/*.bash
 `mise run` is a reserved command in `mise`, that's why I called it `run-bin`
 _______________________________________________________________________________
 
+This is the project structure
+```
+.
+├── CMakeLists.txt
+├── .gitignore
+├── main.cpp
+├── .mise-tasks
+│   ├── build.bash
+│   ├── clean.bash
+│   └── run-bin.bash
+└── mise.toml
+```
+_______________________________________________________________________________
+
 Your `mise.toml` file should look like this now
 ```toml
 [tools]
@@ -89,26 +103,30 @@ _______________________________________________________________________________
 
 Update your `mise.toml` file to look like this
 ```toml
-
 #______________________________________________________________________________
 
 [tools]
-clang-format = "latest"
+# Project Dependencies
 cmake = "latest"
-"conda:clangxx" = "latest"
-"github:clangd/clangd" = "latest"
 ninja = "latest"
-"pipx:cmake-language-server" = { version = "latest", uvx_args = "--with pygls<2" }
+"conda:clangxx" = "latest"
 
+# Development Dependencies
+"github:clangd/clangd" = "latest"
+clang-format = "latest"
+"pipx:cmake-language-server" = { version = "latest", uvx_args = "--with pygls<2" }
 #______________________________________________________________________________
 
 [env]
+PROJECT_NAME = "cpp-project"
 GENERATOR = "Ninja"
 COMPILER = "clang++"
 BUILD_DIR = "build"
 BINARY_NAME = "cpp-project"
 
 # This is the command that will generate the build instructions
+# To check if this works, run this:
+# bash -c "$CMAKE_GBI_CMD"
 CMAKE_GBI_CMD = """
 cmake \
     -G {{env.GENERATOR}} \
@@ -117,10 +135,16 @@ cmake \
 """
 
 # This is the command that will build the project
+# To check if this works, run this:
+# bash -c "$CMAKE_GBI_CMD"
+# bash -c "$CMAKE_BUILD_CMD"
 CMAKE_BUILD_CMD = """
 cmake --build {{env.BUILD_DIR}}
 """
 
+# This is the command that will run the binary
+# To check if these work, run this:
+# bash -c "$RUN_BINARY_CMD"
 RUN_BINARY_CMD = "./{{env.BUILD_DIR}}/{{env.BINARY_NAME}}"
 #______________________________________________________________________________
 
@@ -129,6 +153,28 @@ build = "mise build"
 clean = "mise clean"
 run = "mise run-bin"
 #______________________________________________________________________________
+```
+_______________________________________________________________________________
+
+Add this to the `CMakeLists.txt` file
+```cmake
+# SECTION: Environment Variables
+
+# The following environment variables are declared in the `mise.toml` file:
+# PROJECT_NAME
+# BINARY_NAME
+
+#______________________________________________________________________________
+
+# The minimum version of CMake required to create build instructions
+# in this project
+cmake_minimum_required(VERSION 4.4.3)
+
+# Sets the project name, and specifies that this project uses C++
+project($ENV{PROJECT_NAME} LANGUAGES CXX)
+
+# Declares that a binary executable should be created from `main.cpp`
+add_executable($ENV{BINARY_NAME} main.cpp)
 ```
 _______________________________________________________________________________
 
@@ -144,19 +190,9 @@ Add this to the `main.cpp` file
 #include <iostream>
 
 int main() {
-    std::cout << "\nC++ Project\n";
+    std::cout << "\nC++ Project\n\n";
 
     return 0;
 }
-```
-_______________________________________________________________________________
-
-Add this to the `CMakeLists.txt` file
-```cmake
-cmake_minimum_required(VERSION 4.4.3)
-
-project(cpp-project LANGUAGES CXX)
-
-add_executable(cpp-project main.cpp)
 ```
 _______________________________________________________________________________
