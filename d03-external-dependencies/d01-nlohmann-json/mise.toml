@@ -1,0 +1,50 @@
+#______________________________________________________________________________
+
+[tools]
+# Project Dependencies
+cmake = "latest"
+ninja = "latest"
+"conda:clangxx" = "latest"
+
+# Development Dependencies
+"github:clangd/clangd" = "latest"
+clang-format = "latest"
+"pipx:cmake-language-server" = { version = "latest", uvx_args = "--with pygls<2" }
+#______________________________________________________________________________
+
+[env]
+PROJECT_NAME = "d01-nlohmann-json"
+GENERATOR = "Ninja"
+COMPILER = "clang++"
+BUILD_DIR = "build"
+BINARY_NAME = "d01-nlohmann-json"
+
+# This is the command that will generate the build instructions
+# To check if this works, run this:
+# bash -c "$CMAKE_GBI_CMD"
+CMAKE_GBI_CMD = """
+cmake \
+    -G {{env.GENERATOR}} \
+    -DCMAKE_CXX_COMPILER={{env.COMPILER}} \
+    -B {{env.BUILD_DIR}}
+"""
+
+# This is the command that will build the project
+# To check if this works, run this:
+# bash -c "$CMAKE_GBI_CMD"
+# bash -c "$CMAKE_BUILD_CMD"
+CMAKE_BUILD_CMD = """
+cmake --build {{env.BUILD_DIR}}
+"""
+
+# This is the command that will run the binary
+# To check if these work, run this:
+# bash -c "$RUN_BINARY_CMD"
+RUN_BINARY_CMD = "./{{env.BUILD_DIR}}/{{env.BINARY_NAME}}"
+#______________________________________________________________________________
+
+[shell_alias]
+build = "mise build"
+clean = "mise clean"
+run = "mise run-bin"
+#______________________________________________________________________________
