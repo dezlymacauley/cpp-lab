@@ -17,7 +17,7 @@ project($ENV{PROJECT_NAME} LANGUAGES CXX)
 
 # SECTION: Package Manager Setup
 
-# A link to the latest latest CPM 
+# A link to the latest CPM 
 set(
     LATEST_CPM
     https://github.com/CPM-cmake/CPM.cmake/releases/latest/download/CPM.cmake
@@ -47,10 +47,36 @@ include(${CPM_DOWNLOAD_LOCATION})
 
 #______________________________________________________________________________
 
-# SECTION: Declaring what files should be compiled
+# SECTION: Download external packages
 
-# Sets the project name, and specifies that this project uses C++
-project($ENV{PROJECT_NAME} LANGUAGES CXX)
+# If you want to search for C and C++ packages, you have two options:
+
+# 1. You can search on Conan Center (my prefered choice):
+# https://conan.io/center
+
+# 2. Or you can search the Vcpkg registry:
+# https://vcpkg.io/en/packages
+
+# Note that Conan and Vcpkg are both package managers,
+# that are unrelated to CPM. 
+
+# The syntax for adding a package is:
+# CPMAddPackage(
+#   "<Source prefix>:<username or organization name>/<package name>@<version>"
+# )
+
+# E.g. The GitHub repo for the nlohmann_json package is:
+# https://github.com/nlohmann/json
+
+# So you add it like this: 
+# CPMAddPackage("gh:nlohmann/json@3.12.0")
+
+# For working with JSON data
+CPMAddPackage("gh:nlohmann/json@3.12.0")
+
+#______________________________________________________________________________
+
+# SECTION: Declaring what internal files should be compiled
 
 # Declares that a binary executable should be created from `src/main.cpp`
 add_executable($ENV{BINARY_NAME} src/main.cpp)
