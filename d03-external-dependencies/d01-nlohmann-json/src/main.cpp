@@ -79,9 +79,7 @@
 */
 
 // External Packages
-#include "nlohmann/json_fwd.hpp"
 #include <nlohmann/json.hpp>
-#include <pthread.h>
 using nlohmann::json;
 
 // Standard Library Imports
@@ -90,6 +88,9 @@ using std::cout;
 
 #include <string>
 using std::string;
+
+#include <iomanip>
+using std::setw;
 
 int main() {
     
@@ -119,7 +120,7 @@ int main() {
     
     //_________________________________________________________________________
    
-    // EXAMPLE: 3 => 
+    // EXAMPLE: 3 => Converting a raw string to JSON
 
     string ninja_data_as_raw_string = R"(
         {
@@ -134,6 +135,51 @@ int main() {
 
     cout << "ninja_data_as_json: " << ninja_data_as_json << "\n";
     // ninja_data_as_json: {"age":30,"username":"naruto654","village":"Hidden Leaf"}
+
+    //_________________________________________________________________________
+    
+    // EXAMPLE: 4 => Creating JSON from a raw string
+
+    json jedi_one = json::parse(R"(
+        {
+            "name": "Larry",
+            "age": 45,
+            "enrolled": true
+        }
+    )");
+
+    cout << "jedi_one: " << jedi_one << "\n";
+    // jedi_one: {"age":45,"enrolled":true,"name":"Larry"}
+
+    //_________________________________________________________________________
+    
+    // EXAMPLE: 5 => How to pretty print
+
+    // `setw(2)` means two space indentation.
+    cout << "\n" << setw(2) << jedi_one << "\n";
+    /*
+
+        {
+          "age": 45,
+          "enrolled": true,
+          "name": "Larry"
+        }
+
+    */
+
+    //_________________________________________________________________________
+    
+    // EXAMPLE: 6 => How to serialize (convert a C++ data structure to JSON)
+
+    json player_one = {
+        {"name", "Cassie"},
+        {"highscore", 45}
+    };
+
+    string player_one_as_json = player_one.dump();
+
+    cout << "player_one_as_json: " << player_one_as_json << "\n";
+    // player_one_as_json: {"highscore":45,"name":"Cassie"}
 
     //_________________________________________________________________________
 
