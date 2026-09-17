@@ -171,6 +171,8 @@ int main() {
     
     // EXAMPLE: 6 => How to serialize (convert a C++ data structure to JSON)
 
+    // This is what you use when you want to make API requests.
+
     json player_one = {
         {"name", "Cassie"},
         {"highscore", 45}
@@ -180,6 +182,24 @@ int main() {
 
     cout << "player_one_as_json: " << player_one_as_json << "\n";
     // player_one_as_json: {"highscore":45,"name":"Cassie"}
+
+    //_________________________________________________________________________
+    
+    // SECTION: Nested JSON structures
+
+    json student_one = {
+        {"name", "Jane"},
+        {"id", 32324},
+        {"address",
+            {"street", "123 Drive"},
+            {"city", "Miami"},
+            {"state", "Florida"}
+        }
+    };
+
+
+    string student_one_as_json = student_one.dump();
+    cout << "student_one_as_json: " << student_one_as_json << "\n";
 
     //_________________________________________________________________________
 
