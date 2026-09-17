@@ -79,15 +79,24 @@
 */
 
 // External Packages
+#include "nlohmann/json_fwd.hpp"
 #include <nlohmann/json.hpp>
+#include <pthread.h>
 using nlohmann::json;
 
 // Standard Library Imports
 #include <iostream>
 using std::cout;
 
-int main() {
+#include <string>
+using std::string;
 
+int main() {
+    
+    //_________________________________________________________________________
+
+    // EXAMPLE: 1 => Creating an instance of a `nlohmann/json` class
+    
     json json_response = {
         // The syntax is:
         // "key": "value"
@@ -98,12 +107,35 @@ int main() {
     cout << "json_response is " << json_response << "\n";
     // json_response is {"displayName":"Dezly Macauley","username":"dezlymacauley"}
     
-    // Updating a value
+    //_________________________________________________________________________
+    
+    // EXAMPLE: 2 => Updating a value
+    
     json_response["username"] = "nexuslegend";
     json_response["displayName"] = "Nexus Legend";
     
     cout << "json_response is " << json_response << "\n";
     // json_response is {"displayName":"Nexus Legend","username":"nexuslegend"}
+    
+    //_________________________________________________________________________
+   
+    // EXAMPLE: 3 => 
+
+    string ninja_data_as_raw_string = R"(
+        {
+            "username": "naruto654",
+            "age": 30,
+            "village": "Hidden Leaf"
+        }
+    )";
+
+    // Converting the raw string to JSON
+    json ninja_data_as_json = json::parse(ninja_data_as_raw_string);
+
+    cout << "ninja_data_as_json: " << ninja_data_as_json << "\n";
+    // ninja_data_as_json: {"age":30,"username":"naruto654","village":"Hidden Leaf"}
+
+    //_________________________________________________________________________
 
     return 0;
 }
