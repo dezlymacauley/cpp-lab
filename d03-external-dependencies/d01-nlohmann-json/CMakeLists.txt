@@ -12,7 +12,18 @@
 # in this project
 cmake_minimum_required(VERSION 4.4.3)
 
+# This sets the project name and `LANGUAGES CXX` is the convention to tell
+# CMake that this project uses C++ code.
 project($ENV{PROJECT_NAME} LANGUAGES CXX)
+
+# This tells CMake to generate a `compile_commands.json` file 
+# when generating build instructions for your project.
+# This `compile_commands.json` is used by `clangd`,
+# the language server for C and C++ projects.
+# `compile_commands.json` helps clangd know about the structure 
+# of your project and any external packages you have linked to the project 
+# so that it can provide you with better language support and completion.
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 #______________________________________________________________________________
 
 # SECTION: Package Manager Setup
@@ -89,4 +100,10 @@ CPMAddPackage(
 
 # Declares that a binary executable should be created from `src/main.cpp`
 add_executable($ENV{BINARY_NAME} src/main.cpp)
+#______________________________________________________________________________
+
+# SECTION: Linking external packages
+
+target_link_libraries($ENV{BINARY_NAME} PRIVATE nlohmann_json::nlohmann_json)
+
 #______________________________________________________________________________
