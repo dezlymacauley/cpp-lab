@@ -24,10 +24,11 @@ set(
 )
 
 # Specifies where the CPM package manager will be saved.
-# `CMAKE_SOURCE_DIR` is a built-in variable CMake variable 
-# that is used to a relative path from the project root.
+# `CMAKE_SOURCE_DIR` is a built-in variable CMake variable. 
+# Its value is set the the absolute path to of the project
+# You can this to create a relative path
 set(
-    CPM_DOWNLOAD_LOCATION
+    CPM_DOWNLOAD_LOCATION 
     "${CMAKE_SOURCE_DIR}/cmake/CPM.cmake"
 )
 
@@ -71,8 +72,16 @@ include(${CPM_DOWNLOAD_LOCATION})
 # So you add it like this: 
 # CPMAddPackage("gh:nlohmann/json@3.12.0")
 
+# CPMAddPackage("gh:nlohmann/json@3.12.0")
+
+#______________________________________________________________________________
+
 # For working with JSON data
-CPMAddPackage("gh:nlohmann/json@3.12.0")
+CPMAddPackage(
+    NAME nlohmann_json
+    VERSION 3.12.0
+    URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz
+)
 
 #______________________________________________________________________________
 
