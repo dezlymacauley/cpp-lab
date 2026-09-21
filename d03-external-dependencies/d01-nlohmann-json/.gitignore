@@ -1,2 +1,5 @@
+# Language Server Cache
+/.cache/
+
 # Build Output
 /build/

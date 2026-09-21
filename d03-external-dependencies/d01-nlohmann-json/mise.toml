@@ -10,6 +10,8 @@ ninja = "latest"
 "github:clangd/clangd" = "latest"
 clang-format = "latest"
 "pipx:cmake-language-server" = { version = "latest", uvx_args = "--with pygls<2" }
+eza = "latest"
+
 #______________________________________________________________________________
 
 [env]
@@ -47,4 +49,6 @@ RUN_BINARY_CMD = "./{{env.BUILD_DIR}}/{{env.BINARY_NAME}}"
 build = "mise build"
 clean = "mise clean"
 run = "mise run-bin"
+structure = "mise structure"
 #______________________________________________________________________________
+
