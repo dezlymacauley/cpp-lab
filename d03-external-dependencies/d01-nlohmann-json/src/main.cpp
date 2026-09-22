@@ -93,15 +93,16 @@ using std::string;
 using std::setw;
 
 int main() {
-
     //_________________________________________________________________________
 
-    // EXAMPLE: 1 => Creating an instance of a `nlohmann/json` class
+    // EXAMPLE: 1 => Creating an instance of a `nlohmann/json`
+    // class
 
     json json_response = {// The syntax is:
                           // "key": "value"
                           {"username", "dezlymacauley"},
-                          {"displayName", "Dezly Macauley"}};
+                          {"displayName", "Dezly Macauley"}
+    };
 
     cout << "json_response is " << json_response << "\n";
     // json_response is {"displayName":"Dezly
@@ -115,7 +116,8 @@ int main() {
     json_response["displayName"] = "Nexus Legend";
 
     cout << "json_response is " << json_response << "\n";
-    // json_response is {"displayName":"Nexus Legend","username":"nexuslegend"}
+    // json_response is {"displayName":"Nexus
+    // Legend","username":"nexuslegend"}
 
     //_________________________________________________________________________
 
@@ -133,8 +135,8 @@ int main() {
     json ninja_data_as_json = json::parse(ninja_data_as_raw_string);
 
     cout << "ninja_data_as_json: " << ninja_data_as_json << "\n";
-    // ninja_data_as_json: {"age":30,"username":"naruto654","village":"Hidden
-    // Leaf"}
+    // ninja_data_as_json:
+    // {"age":30,"username":"naruto654","village":"Hidden Leaf"}
 
     //_________________________________________________________________________
 
@@ -169,7 +171,8 @@ int main() {
 
     //_________________________________________________________________________
 
-    // EXAMPLE: 6 => How to serialize (convert a C++ data structure to JSON)
+    // EXAMPLE: 6 => How to serialize (convert a C++ data
+    // structure to JSON)
 
     // This is what you use when you want to make API requests.
 
@@ -188,7 +191,8 @@ int main() {
         {"name", "Jane"},
         {"id", 32324},
         {"address",
-         {{"street", "123 Drive"}, {"city", "Miami"}, {"state", "Florida"}}}};
+         {{"street", "123 Drive"}, {"city", "Miami"}, {"state", "Florida"}}}
+    };
 
     // The `4` means `4` space indentation
     string student_one_as_json = student_one.dump(4);
@@ -216,6 +220,14 @@ int main() {
     cout << "Street: " << student_one["address"]["street"] << "\n";
     cout << "City: " << student_one["address"]["city"] << "\n";
     cout << "State: " << student_one["address"]["state"] << "\n";
+
+    //_________________________________________________________________________
+
+    // EXAMPLE: 9 => Arrays of JSON objects
+
+    json list_of_students = json::array(
+        {{{"name", "Jane"}, {"id", 32324}}, {{"name", "John"}, {"id", 54321}}}
+    );
 
     //_________________________________________________________________________
 

@@ -1,1 +1,19 @@
+# ABOUT: .clang-format
+
+# This file is used to configure the settings 
+# for the code formatter `clang-format`.
+
+# Use the link below to search for additional configuration options:
+
+# https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+#______________________________________________________________________________
+
+# Ensure that tab characters are never used.
+# Any tab characters in the existing file will be replaced with spaces.
+UseTab: Never
+
+# Number of spaces for indentation
 IndentWidth: 4
+
+# Number of characters per line
+ColumnLimit: 80
