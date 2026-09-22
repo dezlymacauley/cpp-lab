@@ -93,33 +93,32 @@ using std::string;
 using std::setw;
 
 int main() {
-    
+
     //_________________________________________________________________________
 
     // EXAMPLE: 1 => Creating an instance of a `nlohmann/json` class
-    
-    json json_response = {
-        // The syntax is:
-        // "key": "value"
-        {"username", "dezlymacauley"}, 
-        {"displayName", "Dezly Macauley"}
-    };
+
+    json json_response = {// The syntax is:
+                          // "key": "value"
+                          {"username", "dezlymacauley"},
+                          {"displayName", "Dezly Macauley"}};
 
     cout << "json_response is " << json_response << "\n";
-    // json_response is {"displayName":"Dezly Macauley","username":"dezlymacauley"}
-    
+    // json_response is {"displayName":"Dezly
+    // Macauley","username":"dezlymacauley"}
+
     //_________________________________________________________________________
-    
+
     // EXAMPLE: 2 => Updating a value
-    
+
     json_response["username"] = "nexuslegend";
     json_response["displayName"] = "Nexus Legend";
-    
+
     cout << "json_response is " << json_response << "\n";
     // json_response is {"displayName":"Nexus Legend","username":"nexuslegend"}
-    
+
     //_________________________________________________________________________
-   
+
     // EXAMPLE: 3 => Converting a raw string to JSON
 
     string ninja_data_as_raw_string = R"(
@@ -134,10 +133,11 @@ int main() {
     json ninja_data_as_json = json::parse(ninja_data_as_raw_string);
 
     cout << "ninja_data_as_json: " << ninja_data_as_json << "\n";
-    // ninja_data_as_json: {"age":30,"username":"naruto654","village":"Hidden Leaf"}
+    // ninja_data_as_json: {"age":30,"username":"naruto654","village":"Hidden
+    // Leaf"}
 
     //_________________________________________________________________________
-    
+
     // EXAMPLE: 4 => Creating JSON from a raw string
 
     json jedi_one = json::parse(R"(
@@ -152,7 +152,7 @@ int main() {
     // jedi_one: {"age":45,"enrolled":true,"name":"Larry"}
 
     //_________________________________________________________________________
-    
+
     // EXAMPLE: 5 => How to pretty print
 
     // `setw(2)` means two space indentation.
@@ -168,15 +168,12 @@ int main() {
     */
 
     //_________________________________________________________________________
-    
+
     // EXAMPLE: 6 => How to serialize (convert a C++ data structure to JSON)
 
     // This is what you use when you want to make API requests.
 
-    json player_one = {
-        {"name", "Cassie"},
-        {"highscore", 45}
-    };
+    json player_one = {{"name", "Cassie"}, {"highscore", 45}};
 
     string player_one_as_json = player_one.dump();
 
@@ -184,22 +181,41 @@ int main() {
     // player_one_as_json: {"highscore":45,"name":"Cassie"}
 
     //_________________________________________________________________________
-    
-    // SECTION: Nested JSON structures
+
+    // EXAMPLE: 7 => Nested JSON structures
 
     json student_one = {
         {"name", "Jane"},
         {"id", 32324},
         {"address",
-            {"street", "123 Drive"},
-            {"city", "Miami"},
-            {"state", "Florida"}
+         {{"street", "123 Drive"}, {"city", "Miami"}, {"state", "Florida"}}}};
+
+    // The `4` means `4` space indentation
+    string student_one_as_json = student_one.dump(4);
+    cout << student_one_as_json << "\n";
+
+    /*
+        {
+            "address": {
+                "city": "Miami",
+                "state": "Florida",
+                "street": "123 Drive"
+            },
+            "id": 32324,
+            "name": "Jane"
         }
-    };
+    */
 
+    //_________________________________________________________________________
 
-    string student_one_as_json = student_one.dump();
-    cout << "student_one_as_json: " << student_one_as_json << "\n";
+    // EXAMPLE: 8 => Accesing fields in Nested JSON structures
+
+    cout << "Name: " << student_one["name"] << "\n";
+    cout << "ID: " << student_one["id"] << "\n";
+
+    cout << "Street: " << student_one["address"]["street"] << "\n";
+    cout << "City: " << student_one["address"]["city"] << "\n";
+    cout << "State: " << student_one["address"]["state"] << "\n";
 
     //_________________________________________________________________________
 
